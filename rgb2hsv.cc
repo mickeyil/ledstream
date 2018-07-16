@@ -213,7 +213,9 @@ void bench2()
     vec_u8 vv(BSZ, 0);
 
     LOGF("start");
-    HsvToRgb(vh, vs, vv, vr, vg, vb);
+    for (int i=0 ; i < 1000; i++) {
+        HsvToRgb(vh, vs, vv, vr, vg, vb);
+    }
     LOGF("end");
     
     unsigned int sum = 0;
