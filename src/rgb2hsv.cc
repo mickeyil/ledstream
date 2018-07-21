@@ -4,6 +4,7 @@
 
 #include "slog.h"
 
+typedef uint8_t u8;
 typedef std::vector<uint8_t> vec_u8;
 
 typedef struct RgbColor
@@ -86,6 +87,7 @@ void HsvToRgb(const vec_u8& vh, const vec_u8& vs, const vec_u8& vv,
 }
 
 
+
 RgbColor HsvToRgb(HsvColor hsv)
 {
     RgbColor rgb;
@@ -166,40 +168,21 @@ HsvColor RgbToHsv(RgbColor rgb)
 
 
 
-#if 0
-void RgbToHsv(const ::vector)
+void HsvToRgb(const u8& h_, const u8& s_, const u8& v_,
+                    u8& r_,       u8& g_,       u8& b_)
 {
-    HsvColor hsv;
-    unsigned char rgbMin, rgbMax;
+  HsvColor hsv;
+  hsv.h = h_;
+  hsv.s = s_;
+  hsv.v = v_;
 
-    rgbMin = rgb.r < rgb.g ? (rgb.r < rgb.b ? rgb.r : rgb.b) : (rgb.g < rgb.b ? rgb.g : rgb.b);
-    rgbMax = rgb.r > rgb.g ? (rgb.r > rgb.b ? rgb.r : rgb.b) : (rgb.g > rgb.b ? rgb.g : rgb.b);
-
-    hsv.v = rgbMax;
-    if (hsv.v == 0)
-    {
-        hsv.h = 0;
-        hsv.s = 0;
-        return hsv;
-    }
-
-    hsv.s = 255 * long(rgbMax - rgbMin) / hsv.v;
-    if (hsv.s == 0)
-    {
-        hsv.h = 0;
-        return hsv;
-    }
-
-    if (rgbMax == rgb.r)
-        hsv.h = 0 + 43 * (rgb.g - rgb.b) / (rgbMax - rgbMin);
-    else if (rgbMax == rgb.g)
-        hsv.h = 85 + 43 * (rgb.b - rgb.r) / (rgbMax - rgbMin);
-    else
-        hsv.h = 171 + 43 * (rgb.r - rgb.g) / (rgbMax - rgbMin);
-
-    return hsv;
+  RgbColor rgb = HsvToRgb(hsv);
+  r_ = rgb.r;
+  g_ = rgb.g;
+  b_ = rgb.b;
 }
-#endif
+
+
 
 
 void bench2()
@@ -214,7 +197,8 @@ void bench2()
 
     LOGF("start");
     for (int i=0 ; i < 1000; i++) {
-        HsvToRgb(vh, vs, vv, vr, vg, vb);
+        // HsvToRgb(vh, vs, vv, vr, vg, vb);
+        HsvToRgb(vh[i], vs[i], vv[i], vr[i], vg[i], vb[i]);
     }
     LOGF("end");
     

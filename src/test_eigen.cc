@@ -16,9 +16,21 @@ void blink(Mtx& data, float t, float freq_Hz, float offset)
 {
   float A = freq_Hz * 2 * M_PI;
   float phi = offset * 2 * M_PI;
-  float val = cos(A*t + phi);
+  float val = 0.5*(cos(A*t + phi) + 1.0);
   data = Mtx::Constant(3, data.cols(), val);
 }
+
+
+#if 0
+void wave(Mtx& data, float t, float freq_Hz, float offset)
+{
+  float A = freq_Hz * 2 * M_PI;
+  float phi = offset * 2 * M_PI;
+  for (size_t i = 0; i < 3; i++) {
+    data.row(i) = data.row(i).setLinspaced(A*(t + offset, A*t + offset + freq_Hz);
+  }
+}
+#endif
 
 int main()
 {
