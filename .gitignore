@@ -1,1 +1,6 @@
+# ignore binary files
 bin/*
+obj/*
+
+# vim swap files
+*.swp
