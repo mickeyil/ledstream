@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "slog.h"
+#include "udpsender.h"
 
 typedef uint8_t u8;
 typedef std::vector<uint8_t> vec_u8;
@@ -182,6 +183,19 @@ void HsvToRgb(const u8& h_, const u8& s_, const u8& v_,
   b_ = rgb.b;
 }
 
+void HsvToRgb(const float& h_, const float& s_, const float& v_,
+                       u8& r_,          u8& g_,          u8& b_)
+{
+  HsvColor hsv;
+  hsv.h = static_cast<uint8_t>(h_);
+  hsv.s = static_cast<uint8_t>(s_);
+  hsv.v = static_cast<uint8_t>(v_);
+
+  RgbColor rgb = HsvToRgb(hsv);
+  r_ = rgb.r;
+  g_ = rgb.g;
+  b_ = rgb.b;
+}
 
 
 
@@ -230,8 +244,10 @@ void bench1()
     }
 }
 
+#if 0
 int main()
 {
     bench2();
     return 0;
 }
+#endif

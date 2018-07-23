@@ -4,3 +4,6 @@ obj/*
 
 # vim swap files
 *.swp
+
+# VS code files
+.vscode/*
