@@ -49,11 +49,13 @@ int main()
   LOGF("end");
   #endif
 
-  UDPSender udpsender("10.0.0.202", 2000);
+  UDPSender udpsender("192.168.1.195", 2000);
+  
+  uint32_t frame_id = 0;
 
-  for (float t = 0.0; t < 10.0; t += 0.1) {
+  for (float t = 0.0; t < 100.0; t += 0.1) {
     
-    blink(hsv_group, 0.0, 1.0, 0.0);
+    blink(hsv_group, t, 1.0, 0.0);
     hsv_group *= 255;
 
     cout << hsv_group << endl;
@@ -61,19 +63,16 @@ int main()
     float * fbuf = hsv_group.data();
     std::vector<uint8_t> ubuf(hsv_group.size());
 
-    LOGF("fbuf: MxN = %dx%d", hsv_group.rows(), hsv_group.cols());
-
     for (size_t i = 0; i < hsv_group.cols(); i++) {
       HsvToRgb(fbuf[3*i], fbuf[3*i+1], fbuf[3*i+2],
         ubuf[3*i], ubuf[3*i+1], ubuf[3*i+2]);
     }
 
     LOGF("Sending t=%.3f ...", t);
-    for (size_t strip_id = 0; strip_id < 1; strip_id++) {
-      udpsender.send(strip_id, 0, &ubuf[0], ubuf.size());
+    for (size_t strip_id = 0; strip_id < 48; strip_id++) {
+      udpsender.send(strip_id, frame_id++, &ubuf[0], ubuf.size());
     }
-    usleep(1000 * 500);
-    break;
+    usleep(1000 * 50);
   }
 
   return 0;

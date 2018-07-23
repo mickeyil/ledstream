@@ -1,5 +1,6 @@
 #include "udpsender.h"
 
+
 UDPSender::UDPSender(const char *hostname, int port, int mtu_) :
     mtu(mtu_)
 { 
@@ -20,9 +21,8 @@ UDPSender::UDPSender(const char *hostname, int port, int mtu_) :
     bcopy((char *)server->h_addr, 
         (char *)&serveraddr.sin_addr.s_addr, server->h_length);
     serveraddr.sin_port = htons(port);
-
-    buf.resize(mtu);
 }
+
 
 UDPSender::~UDPSender()
 {
@@ -30,6 +30,7 @@ UDPSender::~UDPSender()
         close(sockfd);
     }
 }
+
 
 size_t UDPSender::send(int strip_id, int frame_id, uint8_t* colordata,
     size_t size, int pixel_id)
@@ -51,6 +52,8 @@ size_t UDPSender::send(int strip_id, int frame_id, uint8_t* colordata,
     header.num_segments = static_cast<uint32_t>(num_segments);
     header.strip_id = static_cast<uint16_t>(strip_id);
     header.pixel_id = static_cast<uint16_t>(pixel_id); // offset
+    
+    buf.resize(sizeof(header) + dsize);
 
     // send segments as different UDP packets
     for (size_t i = 0; i < num_segments; i++) {
