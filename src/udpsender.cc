@@ -26,7 +26,9 @@ UDPSender::UDPSender(const char *hostname, int port, int mtu_) :
 
 UDPSender::~UDPSender()
 {
-    close(sockfd);
+    if (!(sockfd < 0)) {
+        close(sockfd);
+    }
 }
 
 size_t UDPSender::send(int strip_id, int frame_id, uint8_t* colordata,
