@@ -41,18 +41,9 @@ int main()
 {
   Mtx hsv_group(3, STRIP_SIZE);	
   
-  #if 0
-  LOGF("start");
-  for (size_t i = 0; i < 500; i++) {
-    blink(hsv_group, float(i) / 1000.0, 1.0, 0.0);
-  }
-  LOGF("end");
-  #endif
-
   UDPSender udpsender("192.168.1.195", 2000);
-  
-  uint32_t frame_id = 0;
 
+  uint32_t frame_id = 0;
   for (float t = 0.0; t < 100.0; t += 0.1) {
     
     blink(hsv_group, t, 1.0, 0.0);
