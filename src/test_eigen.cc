@@ -26,6 +26,29 @@ void blink(Mtx& data, float t, float freq_Hz, float offset, float h, float s)
   data.row(2) = RowVectorXf::Constant(data.cols(), val);
 }
 
+Mtx data_uniform(int length, float h, float s, float v)
+{
+  Mtx data = MatrixXf(3, length);
+  data.row(0) = RowVectorXf::Constant(length, h);
+  data.row(1) = RowVectorXf::Constant(length, s);
+  data.row(2) = RowVectorXf::Constant(length, v);
+  return data;
+}
+
+Mtx op_add_wrap(Mtx data, float delta, float min, float max)
+{
+  Mtx delta_from_max = Mtx::Constant(data.rows(), data.cols(), max) - data;
+  //  do wrap addition
+  //  if (data + delta > max) 
+  //    new_data = data + delta - (max+1)
+  //  else  
+  //    new_data = data + delta
+  Mtx mdelta = Mtx::Constant(data.rows(), data.cols(), delta);
+  Mtx mmax = Mtx::Constant(data.rows(), data.cols(), max);
+  Mtx mones = Mtx::Constant(data.rows(), data.cols(), 1.0);
+  data = ((data + mdelta).array() > max).select(data+mdelta-(mmax+mones), data+mdelta);
+  return data;
+}
 
 #if 0
 void wave(Mtx& data, float t, float freq_Hz, float offset)
@@ -42,8 +65,9 @@ void wave(Mtx& data, float t, float freq_Hz, float offset)
 
 int main(int argc, char *argv[])
 {
-  Mtx hsv_group(3, STRIP_SIZE);	
-  
+  // Mtx hsv_group(3, STRIP_SIZE);	
+  Mtx hsv_group = data_uniform(51, 100.0, 255.0, 255.0);
+
   UDPSender udpsender("10.0.0.202", 2000);
   
   uint32_t frame_id = 0;
@@ -57,9 +81,10 @@ int main(int argc, char *argv[])
 
   LOGF("strip_id = %u,  frame_id = %u", strip_id, frame_id);
 
-  for (float t = 0.0; t < 100.0; t += 0.01) {
+  for (float t = 0.0; t < 1000.0; t += 0.01) {
     
-    blink(hsv_group, t, 1.0, 0.0, 200.0, 255.0);
+    // blink(hsv_group, t, 1.0, 0.0, 200.0, 255.0);
+    hsv_group.row(0) = op_add_wrap(hsv_group.row(0), 1.0, 0.0, 255.0);
 
     float * fbuf = hsv_group.data();
     std::vector<uint8_t> ubuf(hsv_group.size());
