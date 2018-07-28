@@ -28,10 +28,21 @@ class LinearPixels
       return strip_id * max_leds_per_strip + offset;
     }
 
-    
     void disable_pixel(size_t linear_addr)
     {
       active_mask[linear_addr] = 0;
+    }
+
+    void disable_strip(size_t strip_id)
+    {
+      for (size_t i = 0; i < max_leds_per_strip; i++) {
+        disable_pixel(get_linaddr(strip_id, i));
+      }
+    }
+
+    bool is_active(int linear_addr) const
+    {
+      return active_mask[linear_addr] == 1;
     }
   
     // access operators
