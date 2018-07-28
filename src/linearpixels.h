@@ -51,6 +51,8 @@ class LinearPixels
 
     void print() const;
 
+    // TODO: add method that gets a vector of indices and returns a vector of
+    // the relevant hsv values for the render loop
 
   private:
     size_t number_of_strips;
