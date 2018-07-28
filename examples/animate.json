@@ -1,0 +1,11 @@
+{
+  "operation" : "animate",
+  "channel" : 0,
+  "timing" :
+  {
+    "start_time_sec" : 12.793,
+    "sync_marker" : "my_song.mp3",
+    "duration" : 0.131
+  },
+  "pixels_group" : [0, 13, 15]
+}

@@ -1,0 +1,19 @@
+{
+  "operation" : "set_animation",
+  "name" : "bg_wave",
+  "channel" : 0,
+  "animation" : "wave",
+  "animation_parameters" :
+  {
+    "initial_color" : [240, 100, 100],
+    "color_channels" : ["v"],
+    "effect" : "sine", 
+    "effect_parameters" :
+    {
+      "freq_hz" : 1.0,
+      "phase"   : 0.0,
+      "max_value" : 0.9,
+      "min_value" : 0.3
+    }
+  }
+}

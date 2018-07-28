@@ -1,0 +1,23 @@
+{
+  "operation" : "set_animation",
+  "channel" : 1,
+  "animation" : "fadeout",
+  "animation_parameters" :
+  {
+    "color" : [0, 0, 100],
+    "effect" : "linear_h2l", 
+    "effect_parameters" :
+    {
+      "high" : 1.0,
+      "low" : 0.0
+    }
+  },
+  "timing" :
+  {
+    "start_time_sec" : 12.793,
+    "sync_marker" : "my_song.mp3",
+    "duration" : 0.131
+  },
+  "pixels_group" : [0, 13, 15]
+}
+
