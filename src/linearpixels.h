@@ -13,6 +13,7 @@ struct hsv_t {
   uint8_t v;
 };
 
+typedef std::vector<hsv_t> hsv_vec_t;
 
 // Linear Pixels maps 2D (strip, pixel) to one linear addressing scheme.
 // addresses linearily from strip 0 to MAX_NUM_OF_STRIPS
@@ -51,8 +52,16 @@ class LinearPixels
 
     void print() const;
 
-    // TODO: add method that gets a vector of indices and returns a vector of
-    // the relevant hsv values for the render loop
+    // returns a vector containing all the values under the indices v_indices.
+    // for instance, invoking this method with v_indices of { 0, 14, 901, 1003 } 
+    // returns a new vector of type hsv_t, size of 4 containing the values of
+    // data[0], data[14], data[901], data[1003] in that order.
+    hsv_vec_t get_pixel_group(const std::vector<uint16_t>& v_indices) const;
+
+    // sets data to a given pixel group and indices
+    void get_pixel_group(const std::vector<uint16_t>& v_indices, 
+                         const hsv_vec_t& hsv_vec);
+
 
   private:
     size_t number_of_strips;

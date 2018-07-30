@@ -67,3 +67,24 @@ void LinearPixels::print() const
 }
 
 
+hsv_vec_t LinearPixels::get_pixel_group(const std::vector<uint16_t>& v_indices) const
+{
+  hsv_vec_t vec(v_indices.size());
+  for (size_t i = 0; i < v_indices.size(); i++) {
+    vec[i] = data[v_indices[i]];
+  }
+  return vec;
+}
+
+
+void LinearPixels::get_pixel_group(const std::vector<uint16_t>& v_indices, 
+                                   const hsv_vec_t& hsv_vec)
+{
+  if (v_indices.size() != hsv_vec.size())
+    throw "size mismatch on pixel assignment";
+
+  for (size_t i = 0; i < v_indices.size(); i++) {
+    data[v_indices[i]] = hsv_vec[i];
+  }
+}
+
