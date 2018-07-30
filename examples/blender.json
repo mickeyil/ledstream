@@ -4,8 +4,8 @@
   "animation" : "blender",
   "animation_parameters" :
   {
-    "hsv_color" : [0, 0, 0],
-    "color_mask" : [0, 1, 0],
+    "fg_color" : [0, 0, 0],
+    "hsv_mask" : [0, 1, 0],
     "duration" : 0.5,
     "peak_time" : 0.04,
     "start_value" : 0.0,

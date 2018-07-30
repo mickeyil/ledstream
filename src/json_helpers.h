@@ -4,7 +4,9 @@
 #include <cstring>
 #include <string>
 #include "json/json.h"
+#include "errors.h"
 #include "slog.h"
+
 
 
 static
@@ -187,7 +189,14 @@ bool json_read(const Json::Value& root, const char* fieldname, T& val)
   return true;
 }
 
-
+template <typename T>
+static
+void json_read_required(const Json::Value& root, const char* fieldname, T& val)
+{
+  if (!json_read<T>(root, fieldname, val)) {
+    ERROR("missing required field");
+  }
+}
 
 template <typename T>
 bool json_read_v(const Json::Value& root, const char* fieldname, std::vector<T>& vec)
@@ -207,6 +216,13 @@ bool json_read_v(const Json::Value& root, const char* fieldname, std::vector<T>&
   return true;
 }
 
+template <typename T>
+void json_read_v_required(const Json::Value& root, const char* fieldname, std::vector<T>& vec)
+{
+  if (!json_read_v<T>(root, fieldname, vec)) {
+    ERROR("missing required field");
+  } 
+}
 
 static
 bool json_read_bool_string_value(const Json::Value& root, const char *fieldname, bool& val)

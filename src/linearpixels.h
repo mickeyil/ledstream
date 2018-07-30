@@ -1,9 +1,11 @@
 #pragma once
 
-#include "stdint.h"
+#include <stdint.h>
 #include <iostream>
 #include <iomanip>
 #include <vector>
+
+#include "errors.h"
 
 static const int MAX_NUM_OF_STRIPS = 48;
 
@@ -11,6 +13,19 @@ struct hsv_t {
   uint8_t h;
   uint8_t s;
   uint8_t v;
+
+  void set(const std::vector<int>& vec) 
+  {
+    if (vec.size() != 3) {
+      ERROR("invalid hsv vector size");
+    }
+    VALIDATE_IN_RANGE(vec[0], 0, 255);      
+    VALIDATE_IN_RANGE(vec[1], 0, 255);      
+    VALIDATE_IN_RANGE(vec[2], 0, 255);      
+    h = static_cast<uint8_t>(vec[0]);
+    s = static_cast<uint8_t>(vec[1]);
+    v = static_cast<uint8_t>(vec[2]);
+  }
 };
 
 typedef std::vector<hsv_t> hsv_vec_t;
