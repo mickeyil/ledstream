@@ -194,7 +194,7 @@ static
 void json_read_required(const Json::Value& root, const char* fieldname, T& val)
 {
   if (!json_read<T>(root, fieldname, val)) {
-    ERROR("missing required field");
+    RUNTIME_ERROR("missing required field: %s", fieldname);
   }
 }
 
@@ -220,7 +220,7 @@ template <typename T>
 void json_read_v_required(const Json::Value& root, const char* fieldname, std::vector<T>& vec)
 {
   if (!json_read_v<T>(root, fieldname, vec)) {
-    ERROR("missing required field");
+    RUNTIME_ERROR("missing required field: %s", fieldname);
   } 
 }
 

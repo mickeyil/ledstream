@@ -77,7 +77,7 @@ hsv_vec_t LinearPixels::get_pixel_group(const std::vector<uint16_t>& v_indices) 
 }
 
 
-void LinearPixels::get_pixel_group(const std::vector<uint16_t>& v_indices, 
+void LinearPixels::set_pixel_group(const std::vector<uint16_t>& v_indices, 
                                    const hsv_vec_t& hsv_vec)
 {
   if (v_indices.size() != hsv_vec.size())

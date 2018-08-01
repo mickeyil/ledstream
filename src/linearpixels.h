@@ -17,7 +17,7 @@ struct hsv_t {
   void from_vec(const std::vector<int>& vec) 
   {
     if (vec.size() != 3) {
-      ERROR("invalid hsv vector size");
+      RUNTIME_ERROR("invalid hsv vector size of %d", (int) vec.size());
     }
     VALIDATE_IN_RANGE(vec[0], 0, 255);      
     VALIDATE_IN_RANGE(vec[1], 0, 255);      
@@ -72,6 +72,8 @@ class LinearPixels
       return active_mask[linear_addr] == 1;
     }
   
+    size_t size() const { return data.size(); }
+
     // access operators
     const hsv_t& operator[] (size_t i) const { return data[i]; }
           hsv_t& operator[] (size_t i)       { return data[i]; }
@@ -85,7 +87,7 @@ class LinearPixels
     hsv_vec_t get_pixel_group(const std::vector<uint16_t>& v_indices) const;
 
     // sets data to a given pixel group and indices
-    void get_pixel_group(const std::vector<uint16_t>& v_indices, 
+    void set_pixel_group(const std::vector<uint16_t>& v_indices, 
                          const hsv_vec_t& hsv_vec);
 
 

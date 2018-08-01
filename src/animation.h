@@ -64,7 +64,7 @@ class Blender : public Animation
     virtual void render(float t_relative, hsv_vec_t& pixels);
 
     virtual void set_parameters(const Json::Value& params);
-    
+
   private:
     // duration of animation
     float duration;
