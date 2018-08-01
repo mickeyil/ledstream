@@ -14,7 +14,7 @@ struct hsv_t {
   uint8_t s;
   uint8_t v;
 
-  void set(const std::vector<int>& vec) 
+  void from_vec(const std::vector<int>& vec) 
   {
     if (vec.size() != 3) {
       ERROR("invalid hsv vector size");
@@ -25,6 +25,17 @@ struct hsv_t {
     h = static_cast<uint8_t>(vec[0]);
     s = static_cast<uint8_t>(vec[1]);
     v = static_cast<uint8_t>(vec[2]);
+  }
+
+  template <typename T>
+  void to_vec(std::vector<T>& vec)
+  {
+    if (vec.size() != 3) {
+      vec.resize(3);
+    }
+    vec[0] = static_cast<T>(h);
+    vec[1] = static_cast<T>(s);
+    vec[2] = static_cast<T>(v);
   }
 };
 

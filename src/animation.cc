@@ -1,3 +1,4 @@
+#include <cassert>
 #include "animation.h"
 #include "errors.h"
 #include "slog.h"
@@ -12,10 +13,9 @@ Animation::Animation(const Json::Value& params) :
 void Blender::set_parameters(const Json::Value& params)
 {
   const Json::Value ap = params["animation_parameters"];
-  std::vector<int> hsv_vec;
-  json_read_v_required<int>(params, "fg_color_hsv", hsv_vec);
-  fg_color_hsv.set(hsv_vec);
-  
+  json_read_v_required<float>(params, "fg_color_hsv", fg_hsv);
+  VALIDATE_TRUE(fg_hsv.size() == 3, "hsv vector size must be 3");
+
   // default HSV mask is all 1's
   if (!json_read_v<int>(params, "hsv_mask", hsv_mask)) {
     hsv_mask.resize(3);
@@ -25,8 +25,8 @@ void Blender::set_parameters(const Json::Value& params)
   duration = ap["duration"].asDouble();
   VALIDATE_TRUE(duration > 0.0, "duration must be positive");
 
-  peak_time = ap.get("peak_time", DEFAULT_PEAK_TIME).asDouble();
-  VALIDATE_IN_RANGE(peak_time, 0.0, 1.0);
+  peak_percent = ap.get("peak_percent", DEFAULT_PEAK_PERCENT).asDouble();
+  VALIDATE_IN_RANGE(peak_percent, 0.0, 1.0);
 
   start_value = ap.get("start_value", DEFAULT_START_VALUE).asDouble();
   VALIDATE_IN_RANGE(start_value, 0.0, 1.0);
@@ -47,5 +47,43 @@ Blender::Blender(const Json::Value& params) :
 
 void Blender::render(float t, hsv_vec_t& pixels)
 {
+  // disabled animation doesn't render
+  if (!is_enabled())
+    return;
 
+  // same for animation outside of its [t_start,t_end] time (duration)
+  if (t < 0.0 || t > duration)
+    return;
+
+  // calculate slopes for piecewise linear function
+  // NOTE: those doesn't change each time a render is made and can be cached
+  // to an instance variable.
+
+  // t_peak is the time at which the alpha function gets to peak value.
+  float t_peak = peak_percent * duration;
+  float m1 = (peak_value - start_value) / t_peak;
+  float m2 = (end_value - peak_value) / t_peak;
+
+  assert(t >= 0.0);
+  assert(t <= duration);
+  float alpha;
+  if (t < t_peak) {
+    alpha = m1*t;
+  } else {
+    alpha = m2*t;
+  }
+
+  std::vector<float> bg_hsv(3), res(3);
+  // iterate on every pixels in the pixel group
+  for (size_t pidx = 0; pidx < pixels.size(); pidx++) {
+    pixels[pidx].to_vec<float>(bg_hsv);
+    for (size_t i = 0; i < 3; i++) {
+      // if mask is not active, take existing pixel color (bg)
+      if (hsv_mask[i]) {
+        res[i] = alpha*fg_hsv[i] + (1.0 - alpha)*bg_hsv[i];
+      } else {
+        res[i] = bg_hsv[i];
+      }
+    }
+  }
 }

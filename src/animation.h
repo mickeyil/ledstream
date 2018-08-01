@@ -24,9 +24,9 @@ class Animation
     // set enable state
     void set_enable(bool is_enabled) { _is_enabled = is_enabled; }
 
-    // render function takes time and pixels vector and modify the pixel vevtor
-    // with the rendered animation.
-    virtual void render(float t, hsv_vec_t& pixels) = 0;
+    // render function takes the time, relative to activation time, and pixels
+    // vector and modify the pixel vector with the updated values.
+    virtual void render(float t_relative, hsv_vec_t& pixels) = 0;
 
     // set animation parameters from JSON input
     virtual void set_parameters(const Json::Value& params) = 0;
@@ -56,12 +56,12 @@ class Blender : public Animation
 		static constexpr float DEFAULT_START_VALUE = 0.0;
 		static constexpr float DEFAULT_PEAK_VALUE = 1.0;
 		static constexpr float DEFAULT_END_VALUE = 0.0;
-	  static constexpr float DEFAULT_PEAK_TIME = 0.0;	
+	  static constexpr float DEFAULT_PEAK_PERCENT = 0.0;	
 
     Blender(const Json::Value& params);
     virtual ~Blender() noexcept { }
 
-    virtual void render(float t, hsv_vec_t& pixels);
+    virtual void render(float t_relative, hsv_vec_t& pixels);
 
     virtual void set_parameters(const Json::Value& params);
     
@@ -70,7 +70,7 @@ class Blender : public Animation
     float duration;
 
     // peak time. values should be in range: [0, 1]
-    float peak_time; 
+    float peak_percent; 
   
     // intensity values. values are in range: [0, 1]
     float peak_value;
@@ -80,7 +80,7 @@ class Blender : public Animation
     // fg and bg color. blend is calculated:
     // val = a(t)*fg + (1 - a(t))*bg
     // where a(t) is the piecewise linear built from duration, peak value/time etc. 
-    hsv_t fg_color_hsv;
+    std::vector<float> fg_hsv;
 
     // activation mask per color channel
     std::vector<int> hsv_mask;
