@@ -1,8 +1,8 @@
 {
   "fg_color_hsv" : [0, 0, 0],
   "hsv_mask" : [0, 1, 0],
-  "duration" : 0.5,
-  "peak_time" : 0.04,
+  "duration" : 1.0,
+  "peak_percent" : 0.1,
   "start_value" : 0.0,
   "peak_value" : 1.0,
   "end_value" : 0.0

@@ -22,7 +22,6 @@ void Blender::set_parameters(const Json::Value& params)
     hsv_mask[0] = hsv_mask[1] = hsv_mask[2] = 1;
   }
     
-  float duration;
   json_read_required<float>(params, "duration", duration);
   VALIDATE_TRUE(duration > 0.0, "duration must be positive");
 
@@ -62,23 +61,28 @@ void Blender::render(float t, hsv_vec_t& pixels)
 
   // t_peak is the time at which the alpha function gets its peak value.
   float t_peak = peak_percent * duration;
-  float m1 = (peak_value - start_value) / t_peak;
-  float m2 = (end_value - peak_value) / t_peak;
+  float m1(0.0), m2(0.0);
+  if (t_peak > 0.0)
+    m1 = (peak_value - start_value) / t_peak;
+  if (duration - t_peak > 0.0)
+    m2 = (end_value - peak_value) / (duration - t_peak);
 
   assert(t >= 0.0);
   assert(t <= duration);
   float alpha;
   if (t < t_peak) {
-    alpha = m1*t;
+    alpha = m1*t + start_value;
   } else {
-    alpha = m2*t;
+    alpha = m2*t - m2*t_peak + peak_value;
   }
 
   std::vector<float> bg_hsv(3), res(3);
   // iterate on every pixels in the pixel group
   for (size_t pidx = 0; pidx < pixels.size(); pidx++) {
+
     pixels[pidx].to_vec<float>(bg_hsv);
     for (size_t i = 0; i < 3; i++) {
+      
       // if mask is not active, take existing pixel color (bg)
       if (hsv_mask[i]) {
         res[i] = alpha*fg_hsv[i] + (1.0 - alpha)*bg_hsv[i];
@@ -86,5 +90,7 @@ void Blender::render(float t, hsv_vec_t& pixels)
         res[i] = bg_hsv[i];
       }
     }
+    // write updated value to pixel group
+    pixels[pidx].from_vec<float>(res);
   }
 }

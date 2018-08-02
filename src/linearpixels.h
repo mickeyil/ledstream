@@ -14,7 +14,8 @@ struct hsv_t {
   uint8_t s;
   uint8_t v;
 
-  void from_vec(const std::vector<int>& vec) 
+  template <typename T>
+  void from_vec(const std::vector<T>& vec) 
   {
     if (vec.size() != 3) {
       RUNTIME_ERROR("invalid hsv vector size of %d", (int) vec.size());
@@ -96,5 +97,6 @@ class LinearPixels
     size_t max_leds_per_strip;
     std::vector<hsv_t> data;
     std::vector<uint8_t> active_mask;
+    std::vector<size_t> leds_per_strip;
 };
 

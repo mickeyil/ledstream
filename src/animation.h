@@ -84,5 +84,9 @@ class Blender : public Animation
 
     // activation mask per color channel
     std::vector<int> hsv_mask;
+
+    // piecewise linear function details. calculated when parameters are set
+    bool is_ready;      // ready to render if set_parameters() was called on the object
+    float m1, m2, t_peak;
 };
 
