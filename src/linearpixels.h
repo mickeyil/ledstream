@@ -5,42 +5,11 @@
 #include <iomanip>
 #include <vector>
 
+#include "colorspace.h"
 #include "errors.h"
 
 static const int MAX_NUM_OF_STRIPS = 48;
 
-struct hsv_t {
-  uint8_t h;
-  uint8_t s;
-  uint8_t v;
-
-  template <typename T>
-  void from_vec(const std::vector<T>& vec) 
-  {
-    if (vec.size() != 3) {
-      RUNTIME_ERROR("invalid hsv vector size of %d", (int) vec.size());
-    }
-    VALIDATE_IN_RANGE(vec[0], 0, 255);      
-    VALIDATE_IN_RANGE(vec[1], 0, 255);      
-    VALIDATE_IN_RANGE(vec[2], 0, 255);      
-    h = static_cast<uint8_t>(vec[0]);
-    s = static_cast<uint8_t>(vec[1]);
-    v = static_cast<uint8_t>(vec[2]);
-  }
-
-  template <typename T>
-  void to_vec(std::vector<T>& vec)
-  {
-    if (vec.size() != 3) {
-      vec.resize(3);
-    }
-    vec[0] = static_cast<T>(h);
-    vec[1] = static_cast<T>(s);
-    vec[2] = static_cast<T>(v);
-  }
-};
-
-typedef std::vector<hsv_t> hsv_vec_t;
 
 // Linear Pixels maps 2D (strip, pixel) to one linear addressing scheme.
 // addresses linearily from strip 0 to MAX_NUM_OF_STRIPS

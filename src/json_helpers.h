@@ -18,7 +18,8 @@ bool json_has_field(const Json::Value& root, const char *fieldname)
 
 
 static 
-bool json_read_string(const Json::Value& root, const char* fieldname, std::string& val, std::string& err)
+bool json_read_string(const Json::Value& root, const char* fieldname, 
+  std::string& val, std::string& err)
 {
   if (!json_has_field(root, fieldname)) {
     return false;
@@ -122,7 +123,8 @@ bool json_read_<float>(const Json::Value& root, const char *fieldname, float& va
 
 
 template <>
-bool json_read_<std::string>(const Json::Value& root, const char *fieldname, std::string& val)
+bool json_read_<std::string>(const Json::Value& root, const char *fieldname, 
+  std::string& val)
 {
   if (!root[fieldname].isString()) return false;
   val = root[fieldname].asString();
@@ -309,6 +311,3 @@ Json::Value json_error(const char *format, ...)
   
   return root;
 }
-
-
-

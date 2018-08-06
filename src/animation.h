@@ -1,9 +1,8 @@
 #pragma once
 
+#include "colorspace.h"
 #include "json_helpers.h"
 
-// for hsv_t
-#include "linearpixels.h"
 
 class Animation
 {
@@ -24,8 +23,8 @@ class Animation
     // set enable state
     void set_enable(bool is_enabled) { _is_enabled = is_enabled; }
 
-    // render function takes the time, relative to activation time, and pixels
-    // vector and modify the pixel vector with the updated values.
+    // render function takes a relative time to activation time, and pixels
+    // vector. It modifies the pixel vector with the updated values.
     virtual void render(float t_relative, hsv_vec_t& pixels) = 0;
 
     // set animation parameters from JSON input
@@ -37,6 +36,11 @@ class Animation
 };
 
 
+
+// Blender animation does Alpha-blend with the background:
+// out = a(t)*fg + (1-a(t))*bg 
+// a(t) is a piecewise linear function of the form below. Can be configured
+// via JSON to the start/end values and peak value/location.
 /*
  1
         peak

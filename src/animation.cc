@@ -36,13 +36,28 @@ void Blender::set_parameters(const Json::Value& params)
 
   end_value = params.get("end_value", DEFAULT_END_VALUE).asDouble();
   VALIDATE_IN_RANGE(end_value, 0.0, 1.0);
+
+  // calculate slopes for piecewise linear function
+  // NOTE: those doesn't change each time a render is made and are cached
+  // to instance variables.
+
+  // t_peak is the time at which the alpha function gets its peak value.
+  t_peak = peak_percent * duration;
+  m1 = 0.0; 
+  m2 = 0.0;
+  if (t_peak > 0.0)
+    m1 = (peak_value - start_value) / t_peak;
+  if (duration - t_peak > 0.0)
+    m2 = (end_value - peak_value) / (duration - t_peak);
 }
+
 
 Blender::Blender(const Json::Value& params) :
   Animation(params)
 {
   set_parameters(params);
 }
+
 
 void Blender::render(float t, hsv_vec_t& pixels)
 {
@@ -54,18 +69,6 @@ void Blender::render(float t, hsv_vec_t& pixels)
   // if outside of its [t_start,t_end] time, there's nothing to render.
   if (t < 0.0 || t > duration)
     return;
-
-  // calculate slopes for piecewise linear function
-  // NOTE: those doesn't change each time a render is made and can be cached
-  // to an instance variable.
-
-  // t_peak is the time at which the alpha function gets its peak value.
-  float t_peak = peak_percent * duration;
-  float m1(0.0), m2(0.0);
-  if (t_peak > 0.0)
-    m1 = (peak_value - start_value) / t_peak;
-  if (duration - t_peak > 0.0)
-    m2 = (end_value - peak_value) / (duration - t_peak);
 
   assert(t >= 0.0);
   assert(t <= duration);
