@@ -57,10 +57,10 @@ class Blender : public Animation
 {
   public:
 
-		static constexpr float DEFAULT_START_VALUE = 0.0;
-		static constexpr float DEFAULT_PEAK_VALUE = 1.0;
-		static constexpr float DEFAULT_END_VALUE = 0.0;
-	  static constexpr float DEFAULT_PEAK_PERCENT = 0.0;	
+    static constexpr float DEFAULT_START_VALUE = 0.0;
+    static constexpr float DEFAULT_PEAK_VALUE = 1.0;
+    static constexpr float DEFAULT_END_VALUE = 0.0;
+    static constexpr float DEFAULT_PEAK_PERCENT = 0.0;
 
     Blender(const Json::Value& params);
     virtual ~Blender() noexcept { }

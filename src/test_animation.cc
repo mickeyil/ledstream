@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
       else
         pixels[i].h += 1;
     }
-    #endif
+#endif
 
     hsv_vec_t pg = pixels.get_pixel_group(group_indices);
     for (size_t i = 0; i < pg.size(); i++) {

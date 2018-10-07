@@ -13,8 +13,8 @@ static const int PIXELS_PER_STRAND = 144;
 ledscape_frame_t * get_next_framebuffer(ledscape_t * leds)
 {
   static int buffer_index = 0;
-	ledscape_frame_t * frame = ledscape_frame(leds, buffer_index);
-	buffer_index = (buffer_index + 1) % 2;
+  ledscape_frame_t * frame = ledscape_frame(leds, buffer_index);
+  buffer_index = (buffer_index + 1) % 2;
   return frame;
 }
 
@@ -22,17 +22,18 @@ ledscape_frame_t * get_next_framebuffer(ledscape_t * leds)
 ledscape_t * StartLedScape()
 {
   ledscape_t *leds = NULL;
-	LOGF("[main] Starting LEDscape...");
+  LOGF("[main] Starting LEDscape...");
 
-	leds = ledscape_init_with_programs(
-		PIXELS_PER_STRAND,
-		path_pru0,
-		path_pru1
-	);		
-	
-	LOGF("[main] Done Starting LEDscape...");
+  leds = ledscape_init_with_programs(
+    PIXELS_PER_STRAND,
+    path_pru0,
+    path_pru1
+  );
+  
+  LOGF("[main] Done Starting LEDscape...");
   return leds;
 }
+
 
 int main()
 {

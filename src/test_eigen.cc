@@ -65,7 +65,7 @@ void wave(Mtx& data, float t, float freq_Hz, float offset)
 
 int main(int argc, char *argv[])
 {
-  // Mtx hsv_group(3, STRIP_SIZE);	
+  // Mtx hsv_group(3, STRIP_SIZE);
   Mtx hsv_group = data_uniform(51, 100.0, 255.0, 255.0);
 
   UDPSender udpsender("10.0.0.202", 2000);
