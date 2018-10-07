@@ -79,11 +79,11 @@ void Blender::render(float t, hsv_vec_t& pixels)
     alpha = m2*t - m2*t_peak + peak_value;
   }
 
-  std::vector<float> bg_hsv(3), res(3);
+  float bg_hsv[3], res[3];
   // iterate on every pixels in the pixel group
   for (size_t pidx = 0; pidx < pixels.size(); pidx++) {
 
-    pixels[pidx].to_vec<float>(bg_hsv);
+    pixels[pidx].to_arr<float>(bg_hsv);
     for (size_t i = 0; i < 3; i++) {
       
       // if mask is not active, take existing pixel color (bg)
@@ -94,6 +94,6 @@ void Blender::render(float t, hsv_vec_t& pixels)
       }
     }
     // write updated value to pixel group
-    pixels[pidx].from_vec<float>(res);
+    pixels[pidx].from_arr<float>(res);
   }
 }

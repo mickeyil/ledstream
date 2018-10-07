@@ -70,6 +70,8 @@ int main(int argc, char *argv[])
   double t_start = gettimef();
   while (true) {
     double t_now = gettimef();
+
+    // increment t_start to form a repeated animation channel duration
     while (t_now > t_start + ch_duration) {
       t_start += ch_duration;
       group_indices = group_all;
