@@ -5,7 +5,7 @@
 #include <iostream>
 #include <algorithm>
 #include "json/json.h"
-#include "animation.h"
+#include "blender.h"
 #include "linearpixels.h"
 #include "errors.h"
 #include "fileio.h"
